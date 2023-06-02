@@ -2,6 +2,7 @@
 import { useState } from "react";
 import EventList from "./Components/EventList";
 import Popup from "./Components/Popup";
+import moment from "moment";
 
 export default function Page() {
   const [currentWeek, setCurrentWeek] = useState(new Date());
@@ -35,7 +36,7 @@ export default function Page() {
     dates.push(new Date(currentDate));
     currentDate.setDate(currentDate.getDate() + 1);
   }
-
+console.log(dates)
   const addEvent = ({ title, dateTime, id }: any) => {
     const newEvent = {
       id: id ? id : new Date().valueOf(),
@@ -94,7 +95,7 @@ export default function Page() {
         </div>
         {dates.map((date) => (
           <div key={date.getTime()} className="mr-4">
-            <div className="font-bold">{date.toDateString()}</div>
+            <div className={`font-bold ${moment(date).format('YYYY-MM-DD') == moment().format('YYYY-MM-DD') ? 'bg-[#3B82F6] text-white px-3 py-1 rounded-md' : ''}`}>{date.toDateString()}</div>
             <EventList date={date} events={events} setEvents={setEvents} fn={showPopupOnUpdate} />
           </div>
         ))}
