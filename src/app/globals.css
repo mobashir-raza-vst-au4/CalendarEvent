@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.eventInput {
+    @apply outline-none bg-slate-300/10 rounded-sm border-b-2 py-2 border-[#1F65C8] placeholder-gray-500 transition-all w-full
+}
