@@ -3,6 +3,7 @@ import { useState } from "react";
 import EventList from "./Components/EventList";
 import Popup from "./Components/Popup";
 import moment from "moment";
+import Header from "./Components/Header";
 
 export default function Page() {
   const [currentWeek, setCurrentWeek] = useState(new Date());
@@ -36,7 +37,7 @@ export default function Page() {
     dates.push(new Date(currentDate));
     currentDate.setDate(currentDate.getDate() + 1);
   }
-console.log(dates)
+  console.log(dates)
   const addEvent = ({ title, dateTime, id }: any) => {
     const newEvent = {
       id: id ? id : new Date().valueOf(),
@@ -69,6 +70,10 @@ console.log(dates)
     setUpdateData(null);
   };
 
+  const handleSetCurrentWeek = () => {
+    setCurrentWeek(new Date());
+  }
+
   return (
     <div>
       <div>
@@ -77,25 +82,22 @@ console.log(dates)
         )}
       </div>
 
-      <div className="flex justify-between mb-4">
-        <button className="px-4 py-2 bg-blue-500 text-white" onClick={handlePreviousWeek}>
-          Previous Week
-        </button>
-        <button className="px-4 py-2 bg-blue-500 text-white" onClick={handleNextWeek}>
-          Next Week
-        </button>
-      </div>
+      <Header handlePrevious={handlePreviousWeek} handleNext={handleNextWeek} currentDate={currentDate} setCurrentWeek={handleSetCurrentWeek} />
 
-      <div className="flex justify-evenly">
+      <div className="flex justify-evenly items-center h-20 relative border-b-[1px]">
         <div
           onClick={() => setShowPopup(true)}
-          className="h-8 w-8 rounded-full bg-white shadow-md flex items-center justify-center"
+          className="h-12 w-12 rounded-full bg-white shadow-lg flex items-center justify-center cursor-pointer hover:shadow-lg hover:shadow-gray-400/50 transition-all duration-500"
         >
-          <span className="cursor-pointer text-xl">+</span>
+          <img src="/plus.png" />
         </div>
         {dates.map((date) => (
           <div key={date.getTime()} className="mr-4">
-            <div className={`font-bold ${moment(date).format('YYYY-MM-DD') == moment().format('YYYY-MM-DD') ? 'bg-[#3B82F6] text-white px-3 py-1 rounded-md' : ''}`}>{date.toDateString()}</div>
+            {/* <div className={`font-bold ${moment(date).format('YYYY-MM-DD') == moment().format('YYYY-MM-DD') ? 'bg-[#3B82F6] text-white px-3 py-1 rounded-md' : ''}`}>{date.toDateString()}</div> */}
+            <div className="flex flex-col items-center gap-y-2 text-[#70757a] ">
+              <span className="text-[11px] font-medium">{moment(date).format('dddd').substring(0, 3).toUpperCase()}</span>
+              {moment(date).format('YYYY-MM-DD') == moment().format('YYYY-MM-DD') ? <span className="text-[26px] font-normal bg-[#1967D2] text-white h-10 w-10 rounded-full flex items-center justify-center">{moment(date).get('date')}</span> : <span className="text-[26px] font-normal h-10 w-10 rounded-full flex items-center justify-center">{moment(date).get('date')}</span>}
+            </div>
             <EventList date={date} events={events} setEvents={setEvents} fn={showPopupOnUpdate} />
           </div>
         ))}

@@ -11,22 +11,23 @@ const Popup = ({ onSave, onClose, isUpdate, updateData }: any) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-10">
-      <div className="bg-white w-96 p-4 rounded shadow">
-        <div className="text-xl font-bold mb-4">Add Event</div>
+      <div className="bg-white w-96 p-4 rounded shadow-xl shadow-gray-400/50">
+        <div className="text-lg font-semibold mb-4 text-[#3c4043]">Add Event</div>
         <div className="p-4 flex flex-col gap-y-5">
           <input type="text" value={title} placeholder="Add Title" className="eventInput" onChange={(e) => setTitle(e.target.value)}/>
             <DateTimePicker onChange={onChange} value={value} />
         </div>
-        <div className="flex justify-end gap-x-4">
+        <div className="flex justify-end gap-x-4 mt-4">
           <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            className="bg-[#1967D2] hover:bg-blue-700 text-white font-semibold text-[14px] py-2 px-4 rounded transition-all duration-500"
             onClick={onClose}
           >
             Cancel
           </button>
           <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            className={`${title.length ? 'bg-[#1967D2] hover:bg-blue-700' : 'bg-blue-300 cursor-not-allowed'}  text-white font-semibold text-[14px] py-2 px-4 rounded transition-all duration-500`}
             onClick={() => !isUpdate ? onSave({title, dateTime: value}) : onSave({id: updateData.id, title, dateTime: value})}
+            disabled = {!title.length ? true : false}
           >
             {!isUpdate ? 'Save' : 'Update'}
           </button>

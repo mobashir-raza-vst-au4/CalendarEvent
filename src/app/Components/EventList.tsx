@@ -21,7 +21,7 @@ const EventList = ({ date, events, setEvents, fn }: any) => {
   };
 
   return (
-    <div>
+    <div className="flex flex-col justify-center absolute mt-2 -ml-9">
       {filteredEvents.map((event: any) => (
         <div
           key={event.id}
