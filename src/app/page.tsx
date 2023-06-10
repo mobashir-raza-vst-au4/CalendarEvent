@@ -4,6 +4,7 @@ import EventList from "./Components/EventList";
 import Popup from "./Components/Popup";
 import moment from "moment";
 import Header from "./Components/Header";
+import 'react-calendar/dist/Calendar.css';
 
 export default function Page() {
   const [currentWeek, setCurrentWeek] = useState(new Date());
@@ -70,8 +71,8 @@ export default function Page() {
     setUpdateData(null);
   };
 
-  const handleSetCurrentWeek = () => {
-    setCurrentWeek(new Date());
+  const handleSetCurrentWeek = (e: any) => {
+    setCurrentWeek(e ? e : new Date());
   }
 
   return (
@@ -87,7 +88,7 @@ export default function Page() {
       <div className="flex justify-evenly items-center h-20 relative border-b-[1px]">
         <div
           onClick={() => setShowPopup(true)}
-          className="h-12 w-12 rounded-full bg-white shadow-lg flex items-center justify-center cursor-pointer hover:shadow-lg hover:shadow-gray-400/50 transition-all duration-500"
+          className="h-14 w-14 rounded-full bg-white shadow-lg flex items-center justify-center cursor-pointer hover:shadow-lg hover:shadow-gray-400/50 transition-all duration-500"
         >
           <img src="/plus.png" />
         </div>
