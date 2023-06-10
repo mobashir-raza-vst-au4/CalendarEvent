@@ -21,15 +21,15 @@ const EventList = ({ date, events, setEvents, fn }: any) => {
   };
 
   return (
-    <div className="flex flex-col justify-center absolute mt-2 -ml-9">
+    <div className="flex flex-col justify-center items-center absolute mt-2 -ml-[75px]">
       {filteredEvents.map((event: any) => (
         <div
           key={event.id}
-          className="p-2 bg-gray-100 mb-2 flex items-center gap-x-5 justify-evenly"
+          className="p-2 bg-[#039BE5] mb-2 flex items-center gap-x-5 justify-between w-[200px] rounded-md"
         >
           <div>
-            <div className="font-bold">{event.title}</div>
-            <div>
+            <div className="font-bold text-white">{event.title}</div>
+            <div className="text-white">
               {event.date.toLocaleTimeString([], {
                 hour: "2-digit",
                 minute: "2-digit",
