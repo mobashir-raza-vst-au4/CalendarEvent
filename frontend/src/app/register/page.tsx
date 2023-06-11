@@ -44,7 +44,7 @@ const Page = () => {
     return (
         <div className="bg-white flex flex-col items-center h-screen justify-center md:px-0 px-3">
             <form onSubmit={handleSubmit}>
-                <div className="md:w-[450px] flex flex-col border border-gray-300 rounded-md shadow-md px-10 py-10 gap-y-2">
+                <div className="md:w-[450px] flex flex-col border border-gray-300 rounded-md shadow-md md:px-10 px-5 py-10 gap-y-2">
                     <div className='flex flex-col items-center gap-y-5'>
                         <img src="/google.png" />
                         <div className='flex flex-col items-center gap-y-3'>
