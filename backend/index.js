@@ -6,6 +6,7 @@ const PORT = 8000;
 const userRoutes = require('./routes/user');
 const eventRoutes = require('./routes/event');
 const { startTask } = require('./cronjob');
+const router = express.Router();
 const task = "start";
 require('dotenv').config()
 
@@ -30,6 +31,13 @@ db.once('open', () => {
 //Configure routes
 app.use('/api/user', userRoutes);
 app.use('/api/event', eventRoutes);
+
+router.get('/', function (req, res) {
+    return res.status(200).json({ message: 'Cool!! API is working!' });
+});
+
+// Mount the router on the /api path prefix
+app.use('/', router);
 
 if (task === "start") {
     startTask(task)
