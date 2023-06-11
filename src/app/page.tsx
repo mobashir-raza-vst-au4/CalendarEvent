@@ -1,17 +1,21 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import EventList from "./Components/EventList";
 import Popup from "./Components/Popup";
-import moment from "moment";
+import moment from "moment-timezone";
 import Header from "./Components/Header";
 import 'react-calendar/dist/Calendar.css';
+import WithAuth from "./Components/WithAuth";
+import { createEvent, getAllEvents, updateSingleEvent } from './services/EventService';
+import { toast } from "react-toastify";
 
-export default function Page() {
+const Page = () => {
   const [currentWeek, setCurrentWeek] = useState(new Date());
   const [showPopup, setShowPopup] = useState(false);
   const [isUpdate, setIsUpdate] = useState(false);
   const [updateData, setUpdateData] = useState(null);
   const [events, setEvents]: any = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handlePreviousWeek = () => {
     const previousWeek = new Date(currentWeek);
@@ -38,26 +42,53 @@ export default function Page() {
     dates.push(new Date(currentDate));
     currentDate.setDate(currentDate.getDate() + 1);
   }
-  console.log(dates)
-  const addEvent = ({ title, dateTime, id }: any) => {
-    const newEvent = {
-      id: id ? id : new Date().valueOf(),
-      title,
-      date: dateTime,
-    };
-    let flag = false;
-    const newArray = events.map((item: any) => {
-      if (item.id === newEvent.id) {
-        flag = true;
-        return newEvent;
-      }
-      return item;
-    });
-    setEvents(!flag ? [...events, newEvent] : newArray);
-    setShowPopup(false);
-    setIsUpdate(false);
-    setUpdateData(null);
-  };
+
+  const addEvent = (obj: any) => {
+    obj.timezone = moment.tz.guess();
+    obj.dateTime = new Date(obj.dateTime).getTime();
+    setIsLoading(true);
+
+    createEvent(`${process.env.NEXT_PUBLIC_HOST}/api/event/create`, obj)
+      .then(function (data) {
+        // console.log("created", data);
+        const newEvent = data.data;
+        setIsLoading(false);
+        setEvents([...events, newEvent])
+        setShowPopup(false);
+        toast.success("Event created successfully");
+      }).catch(function (error) {
+        console.log("error while creating event", error)
+        setIsLoading(false);
+        toast.error(error);
+      })
+  }
+
+  const updateEvent = (obj: any) => {
+    obj.timezone = moment.tz.guess();
+    obj.dateTime = new Date(obj.dateTime).getTime();
+    setIsLoading(true);
+    updateSingleEvent(`${process.env.NEXT_PUBLIC_HOST}/api/event/${obj._id}/update`, obj)
+      .then(function (data) {
+        // console.log("updated---data---", data);
+        const updatedEvent = data.event;
+        const newArray = events.map((item: any) => {
+          if (item._id === updatedEvent._id) {
+            return updatedEvent;
+          }
+          return item;
+        });
+        setIsLoading(false);
+        setEvents(newArray)
+        setShowPopup(false);
+        setIsUpdate(false);
+        setUpdateData(null);
+        toast.success("Event updated successfully");
+      }).catch(function (error) {
+        console.log("error while updating event", error)
+        setIsLoading(false);
+        toast.error(error);
+      })
+  }
 
   const showPopupOnUpdate = (event: any) => {
     setShowPopup(true);
@@ -75,11 +106,23 @@ export default function Page() {
     setCurrentWeek(e ? e : new Date());
   }
 
+  useEffect(() => {
+    //Call an API to get all events for a user.
+    getAllEvents(`${process.env.NEXT_PUBLIC_HOST}/api/event/get-events`)
+      .then(function (data) {
+        // console.log("recieve events", data)
+        setEvents(data.events)
+      }).catch(function (error) {
+        console.log("error while getting events", error)
+        toast.error(error)
+      })
+  }, [])
+
   return (
     <div>
       <div>
         {showPopup && (
-          <Popup onSave={addEvent} onClose={onClose} isUpdate={isUpdate} updateData={updateData} />
+          <Popup onSave={addEvent} onUpdate={updateEvent} onClose={onClose} isUpdate={isUpdate} updateData={updateData} isLoading={isLoading} />
         )}
       </div>
 
@@ -94,7 +137,6 @@ export default function Page() {
         </div>
         {dates.map((date) => (
           <div key={date.getTime()} className="mr-4">
-            {/* <div className={`font-bold ${moment(date).format('YYYY-MM-DD') == moment().format('YYYY-MM-DD') ? 'bg-[#3B82F6] text-white px-3 py-1 rounded-md' : ''}`}>{date.toDateString()}</div> */}
             <div className="flex flex-col items-center gap-y-2 text-[#70757a] ">
               <span className="text-[11px] font-medium">{moment(date).format('dddd').substring(0, 3).toUpperCase()}</span>
               {moment(date).format('YYYY-MM-DD') == moment().format('YYYY-MM-DD') ? <span className="text-[26px] font-normal bg-[#1967D2] text-white h-10 w-10 rounded-full flex items-center justify-center">{moment(date).get('date')}</span> : <span className="text-[26px] font-normal h-10 w-10 rounded-full flex items-center justify-center">{moment(date).get('date')}</span>}
@@ -106,3 +148,5 @@ export default function Page() {
     </div>
   );
 }
+
+export default WithAuth(Page)
