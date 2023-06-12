@@ -39,17 +39,17 @@ router.get('/', function (req, res) {
 // Mount the router on the /api path prefix
 app.use('/', router);
 
-if (task === "start") {
-    startTask(task)
-}
+// if (task === "start") {
+//     startTask(task)
+// }
 
-if (task === "stop") {
-    stopTask(task)
-}
+// if (task === "stop") {
+//     stopTask(task)
+// }
 
-if (task === "destroy") {
-    destroyTask(task)
-}
+// if (task === "destroy") {
+//     destroyTask(task)
+// }
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

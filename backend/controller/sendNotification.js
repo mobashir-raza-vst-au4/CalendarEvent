@@ -15,7 +15,7 @@ const transporter = nodemailer.createTransport({
     },
 });
 
-const sendMail = async (req, res) => {
+export default async function sendMail(req, res) {
     console.log("called")
     const currentTime = new Date().getTime();
     const tenMinutesLater = currentTime + 10 * 60 * 1000;
@@ -50,5 +50,3 @@ const sendMail = async (req, res) => {
         });
     }
 }
-
-module.exports = { sendMail }
