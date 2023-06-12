@@ -28,14 +28,14 @@ const sendMail = async (req, res) => {
     console.log("events find..", events)
     for (const event of events) {
         console.log("under loop", event)
-        const { user, title, dateTime } = event;
+        const { user, title, dateTime, timezone } = event;
 
         // Send email notification to the user
         const mailOptions = {
             from: process.env.NODEMAILER_USER,
             to: user.email,
             subject: 'Event Reminder',
-            text: `Event "${title}" is starting at ${moment(dateTime).format('lll')}. Don't forget to attend!`,
+            text: `Event "${title}" is starting at ${moment(dateTime).tz(timezone).format('lll')}. Don't forget to attend!`,
         };
 
         transporter.sendMail(mailOptions, async (error, info) => {

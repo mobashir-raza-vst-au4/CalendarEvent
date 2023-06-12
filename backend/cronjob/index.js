@@ -4,8 +4,8 @@ const axios = require('axios');
 
 const job = cron.schedule('* * * * *', async () => {
     console.log("running");
-    // let api = "https://google-calendar-backend.vercel.app/api/event/trigger-mail";
-    await axios.get('http://localhost:8000/api/event/trigger-mail')
+    let api = "https://google-calendar-backend.vercel.app/api/event/trigger-mail";
+    await axios.get(api)
 })
 
 module.exports = {
