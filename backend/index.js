@@ -33,7 +33,7 @@ app.use('/api/user', userRoutes);
 app.use('/api/event', eventRoutes);
 
 router.get('/', function (req, res) {
-    return res.status(200).json({ message: 'API is working! Cool.' });
+    return res.status(200).json({ message: 'API is working!! Cool.' });
 });
 
 // Mount the router on the /api path prefix
