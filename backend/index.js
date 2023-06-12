@@ -25,6 +25,9 @@ const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'Connection error:'));
 db.once('open', () => {
     console.log('Database connected successfully');
+    if (task === "start") {
+        startTask(task)
+    }
 });
 
 
@@ -43,13 +46,13 @@ app.use('/', router);
 //     startTask(task)
 // }
 
-// if (task === "stop") {
-//     stopTask(task)
-// }
+if (task === "stop") {
+    stopTask(task)
+}
 
-// if (task === "destroy") {
-//     destroyTask(task)
-// }
+if (task === "destroy") {
+    destroyTask(task)
+}
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
