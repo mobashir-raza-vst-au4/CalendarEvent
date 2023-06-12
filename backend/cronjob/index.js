@@ -1,8 +1,10 @@
 const cron = require('node-cron');
-const { sendMail } = require('./../controller/sendNotification')
+const { sendMail } = require('./../controller/sendNotification');
+const axios = require('axios');
+
 const job = cron.schedule('* * * * *', async () => {
     console.log("running");
-    await sendMail();
+    axios.get('https://google-calendar-backend.vercel.app/api/event/trigger-mail')
 })
 
 module.exports = {
