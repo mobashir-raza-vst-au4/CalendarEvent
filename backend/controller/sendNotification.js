@@ -20,12 +20,14 @@ const sendMail = async (req, res) => {
     const currentTime = new Date().getTime();
     const tenMinutesLater = currentTime + 10 * 60 * 1000;
 
+    console.log("current time", currentTime);
+    console.log("tenMinutesLater", tenMinutesLater);
     // Find events that are starting within the next 10 minutes
-    // dateTime: { $gte: currentTime, $lt: tenMinutesLater }, 
-    const events = await Event.find({ is_mail_sent: false }).populate('user');
+    const events = await Event.find({ dateTime: { $gte: currentTime, $lt: tenMinutesLater }, is_mail_sent: false }).populate('user');
 
     console.log("events find..", events)
     for (const event of events) {
+        console.log("under loop", event)
         const { user, title, dateTime } = event;
 
         // Send email notification to the user
