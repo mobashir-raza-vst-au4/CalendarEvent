@@ -131,15 +131,15 @@ const Page = () => {
       <div className="flex justify-evenly items-center h-20 relative border-b-[1px]">
         <div
           onClick={() => setShowPopup(true)}
-          className="h-14 w-14 rounded-full bg-white shadow-lg flex items-center justify-center cursor-pointer hover:shadow-lg hover:shadow-gray-400/50 transition-all duration-500"
+          className="md:h-14 md:w-14 w-10 h-10 rounded-full bg-white shadow-lg flex items-center justify-center cursor-pointer hover:shadow-lg hover:shadow-gray-400/50 transition-all duration-500"
         >
-          <img src="/plus.png" />
+          <img src="/plus.png" className="sm:h-8 h-5"/>
         </div>
         {dates.map((date) => (
           <div key={date.getTime()} className="mr-4">
-            <div className="flex flex-col items-center gap-y-2 text-[#70757a] ">
-              <span className="text-[11px] font-medium">{moment(date).format('dddd').substring(0, 3).toUpperCase()}</span>
-              {moment(date).format('YYYY-MM-DD') == moment().format('YYYY-MM-DD') ? <span className="text-[26px] font-normal bg-[#1967D2] text-white h-10 w-10 rounded-full flex items-center justify-center">{moment(date).get('date')}</span> : <span className="text-[26px] font-normal h-10 w-10 rounded-full flex items-center justify-center">{moment(date).get('date')}</span>}
+            <div className="flex flex-col items-center gap-y-2 text-[#70757a]">
+              <span className="sm:text-[11px] text-[8px] font-medium">{moment(date).format('dddd').substring(0, 3).toUpperCase()}</span>
+              {moment(date).format('YYYY-MM-DD') == moment().format('YYYY-MM-DD') ? <span className="sm:text-[26px] text-[12px] font-normal bg-[#1967D2] text-white sm:h-10 sm:w-10 h-8 w-8 rounded-full flex items-center justify-center">{moment(date).get('date')}</span> : <span className="sm:text-[26px] text-[12px] font-normal sm:h-10 sm:w-10 h-8 w-8 rounded-full flex items-center justify-center">{moment(date).get('date')}</span>}
             </div>
             <EventList date={date} events={events} setEvents={setEvents} fn={showPopupOnUpdate} />
           </div>

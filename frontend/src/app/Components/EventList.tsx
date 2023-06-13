@@ -1,14 +1,24 @@
-import React, { useState } from "react";
-import { AiFillDelete, AiFillEdit } from "react-icons/ai";
+import React, { Fragment, useState } from "react";
+import { BiDotsVerticalRounded, BiPencil } from "react-icons/bi";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import { RxCross1 } from "react-icons/rx";
 import { deleteSingleEvent } from "../services/EventService";
 import { toast } from "react-toastify";
+import { Dialog, Transition } from "@headlessui/react";
+import moment from "moment";
 
 const EventList = ({ date, events, setEvents, fn }: any) => {
   const [hoveredEventId, setHoveredEventId] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [clickedEventId, setClickedEventId] = useState(null);
+  const [deleteEventId, setDeleteEventId] = useState(null);
+
+  // const [isLoading, setIsLoading] = useState(false);
+
+  const [popupPosition, setPopupPosition] = useState({ x: 0, y: 0 });
+  const [showPopup, setShowPopup] = useState(false);
 
   // Filter events for the current date
-  const filteredEvents = events.filter((event: any) => {
+  let filteredEvents = events.filter((event: any) => {
     return (
       new Date(event.dateTime).getDate() === date.getDate() &&
       new Date(event.dateTime).getMonth() === date.getMonth() &&
@@ -16,23 +26,30 @@ const EventList = ({ date, events, setEvents, fn }: any) => {
     );
   });
 
+  filteredEvents = filteredEvents.sort((a: any, b: any) => a.dateTime - b.dateTime);
+
   const deleteEvent = (event: any) => {
-    setIsLoading(true);
+    setDeleteEventId(event._id);
+    setShowPopup(false);
+    toast.info('Deleting Event')
+    // setIsLoading(true);
     deleteSingleEvent(`${process.env.NEXT_PUBLIC_HOST}/api/event/${event._id}/delete`)
       .then(function () {
         const newEventList = events.filter((el: any) => el._id !== event._id);
-        setIsLoading(false);
+        // setIsLoading(false);
         setEvents(newEventList);
         toast.success(`Event with this id: ${event._id} deleted.`)
       }).catch(function (error) {
         console.log("error while delete an event", error)
         toast.error(error)
-        setIsLoading(false);
+        // setIsLoading(false);
+        setDeleteEventId(null);
       })
 
   };
 
   const updateEvent = (event: any) => {
+    setShowPopup(false);
     fn(event);
   };
 
@@ -44,42 +61,97 @@ const EventList = ({ date, events, setEvents, fn }: any) => {
     setHoveredEventId(null);
   };
 
+  const handleClick = (e: any, data: any) => {
+
+    let l = e.clientX + 10
+    let h = e.clientY
+    if ((window.innerWidth - e.clientX) < 200) {
+      l = l - 200;
+    }
+    if ((window.innerHeight - e.clientY) < 100) {
+      h = h - 100;
+    }
+
+    setPopupPosition({ x: l, y: h });
+    setClickedEventId(data._id);
+    setShowPopup(true);
+  };
+
+  const onCloseModal = () => {
+    setShowPopup(false);
+    setClickedEventId(null);
+  }
+
+  const style = {
+    left: `${popupPosition.x}px`,
+    top: `${popupPosition.y}px`,
+
+  }
   return (
-    <div className="flex flex-col justify-center items-center absolute mt-2 -ml-[75px]">
+    <div className="flex flex-col justify-center items-center absolute mt-2 -ml-[2%] w-[10%]">
       {filteredEvents.map((event: any) => (
         <div
+          onClick={(e) => handleClick(e, event)}
           key={event._id}
-          className="p-2 bg-[#039BE5] mb-2 flex items-center gap-x-5 justify-between w-[150px] md:w-[200px] rounded-md"
+          className={`${event._id === deleteEventId ? 'bg-blue-300' : 'bg-[#039BE5]'} mb-2 flex items-center gap-x-5 justify-between rounded-md w-full relative p-2 cursor-pointer`}
           onMouseEnter={() => handleCardHover(event._id)}
           onMouseLeave={handleCardLeave}
         >
-          <div>
-            <p className="font-bold text-white">{event.title}</p>
-            <div className="text-white">
+          <div className="flex flex-col gap-y-1 w-full">
+            <p className="font-bold text-white text-xs truncate ">{event.title}</p>
+            <div className="text-white text-xs">
               {new Date(event.dateTime).toLocaleTimeString([], {
                 hour: "2-digit",
                 minute: "2-digit",
               })}
             </div>
           </div>
-          {hoveredEventId === event._id && (<div className="flex flex-col gap-y-4">
-            <div className={` ${!isLoading ? 'cursor-pointer transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110' : ''} flex items-center justify-center`} onClick={() => deleteEvent(event)}>
-              {!isLoading ? <AiFillDelete style={{ color: '#4d4d4d' }} /> :
-                (
-                  <div role="status">
-                    <svg aria-hidden="true" className="w-3 h-3 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
-                      <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" />
-                    </svg>
-                    <span className="sr-only">Loading...</span>
-                  </div>
-                )
-              }
-            </div>
-            <div className="cursor-pointer transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110" onClick={() => updateEvent(event)}>
-              <AiFillEdit style={{ color: '#4d4d4d' }} />
-            </div>
-          </div>)}
+          {/* {hoveredEventId === event._id &&
+            (
+              <div className="absolute sm:right-0 -right-[2px] top-1">
+                <BiDotsVerticalRounded className="text-[#4d4d4d] cursor-pointer" onClick={(e) => handleClick(e, event)} />
+              </div>
+            )
+          } */}
+
+          {showPopup && clickedEventId === event._id && (
+            <Transition appear show={showPopup} as={Fragment}>
+              <Dialog as="div" className={`absolute`} style={style} onClose={() => onCloseModal()}>
+                <div className="flex min-h-full p-4">
+                  <Transition.Child
+                    as={Fragment}
+                    enter="ease-out duration-300"
+                    enterFrom="opacity-0 scale-95"
+                    enterTo="opacity-100 scale-100"
+                    leave="ease-in duration-200"
+                    leaveFrom="opacity-100 scale-100"
+                    leaveTo="opacity-0 scale-95"
+                  >
+                    <Dialog.Panel className="w-[200px] bg-gray-50 shadow-lg shadow-gray-400/60 border-[1.5px] border-gray-100 transition ease-in-out duration-500 rounded-lg z-50 pt-1 pb-3">
+                      <Dialog.Title>
+                        <div className="flex items-center justify-end gap-x-2 mb-2 pl-5 pr-1 border border-b-1 border-t-0 border-x-0 pb-1">
+                          <div onClick={() => updateEvent(event)} className="hover:bg-gray-200 rounded-full h-8 w-8 flex items-center justify-center p-[5px] transition-all duration-500 cursor-pointer">
+                            <BiPencil style={{ color: '#4d4d4d' }} />
+                          </div>
+                          <div onClick={() => deleteEvent(event)} className="hover:bg-gray-200 rounded-full h-8 w-8 flex items-center justify-center p-[5px] transition-all duration-500 cursor-pointer">
+                            <RiDeleteBin6Line style={{ color: '#4d4d4d' }} />
+                          </div>
+                          <div onClick={() => onCloseModal()} className="hover:bg-gray-200 rounded-full h-8 w-8 flex items-center justify-center p-[5px] transition-all duration-500 cursor-pointer">
+                            <RxCross1 />
+                          </div>
+                        </div>
+
+                        <div className="flex flex-col gap-y-1 text-[#3c4043] font-normal px-5">
+                          <p className="text-lg ">{event.title}</p>
+                          <p className="text-xs font-medium">{moment(event.dateTime).tz(moment.tz.guess()).format('llll')}</p>
+                        </div>
+                      </Dialog.Title>
+                    </Dialog.Panel>
+                  </Transition.Child>
+                </div>
+              </Dialog>
+            </Transition>
+          )}
         </div>
       ))}
     </div>

@@ -39,7 +39,7 @@ const Popup = ({ onSave, onUpdate, onClose, isUpdate, updateData, isLoading }: a
         animate="visible"
         exit="exit"
         className="fixed inset-0 flex items-center justify-center z-10">
-        <div className="bg-white w-96 p-4 rounded shadow-xl shadow-gray-400/50">
+        <div className="bg-white sm:w-96 w-80 p-4 rounded shadow-xl shadow-gray-400/50">
           <div className="text-lg font-semibold mb-4 text-[#3c4043]">Add Event</div>
           <div className="p-4 flex flex-col gap-y-5">
             <input type="text" value={title} placeholder="Add Title" className="eventInput" onChange={(e) => setTitle(e.target.value)} />
@@ -53,9 +53,9 @@ const Popup = ({ onSave, onUpdate, onClose, isUpdate, updateData, isLoading }: a
               Cancel
             </button>
             <button
-              className={`${title.length ? 'bg-[#1967D2] hover:bg-blue-700' : 'bg-blue-300 cursor-not-allowed'}  text-white w-[80px] h-[38px] font-semibold text-[14px] py-2 px-4 rounded transition-all duration-500 flex items-center justify-center`}
+              className={`${title.trim().length ? 'bg-[#1967D2] hover:bg-blue-700' : 'bg-blue-300 cursor-not-allowed'}  text-white w-[80px] h-[38px] font-semibold text-[14px] py-2 px-4 rounded transition-all duration-500 flex items-center justify-center`}
               onClick={() => !isUpdate ? onSave({ title, dateTime: value }) : onUpdate({ _id: updateData._id, title, dateTime: value })}
-              disabled={!title.length ? true : false}
+              disabled={!title.trim().length ? true : false}
             >
 
               {isLoading ? (

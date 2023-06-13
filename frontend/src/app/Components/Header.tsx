@@ -58,21 +58,21 @@ const Header = ({ handlePrevious, handleNext, currentDate, setCurrentWeek }: any
                     <img src="https://ssl.gstatic.com/calendar/images/dynamiclogo_2020q4/calendar_10_2x.png" width={40} />
                     <span className="text-[#3c4043] font-normal text-[22px] leading-5">Calendar</span>
                 </div>
-                <div className="w-[300px] flex justify-between gap-x-5 items-center">
-                    <div onClick={() => selectToday()} className="border border-gray-300 rounded-[4px] px-3 py-1 cursor-pointer hover:bg-gray-200/80 transition-all duration-500">
-                        <span className="text-[#3c4043] text-sm font-medium">Today</span>
+                <div className="sm:w-[300px] w-0 flex justify-between gap-x-5 items-center">
+                    <div onClick={() => selectToday()} className="flex items-center justify-center border border-gray-300 rounded-[4px] sm:h-9 sm:w-[60px] h-7 w-14 sm:px-10 px-8  cursor-pointer hover:bg-gray-200/80 transition-all duration-500">
+                        <span className="text-[#3c4043] sm:text-sm text-xs font-medium">Today</span>
                     </div>
                     <div className="flex items-center gap-2 cursor-pointer">
                         <div onClick={handlePrevious} className="hover:bg-gray-200/80 rounded-full p-1 transition-all duration-500">
-                            <GrFormPrevious style={{ fontSize: '20px', color: '#3c4043' }} />
+                            <GrFormPrevious className='text-[#3c4043] sm:text-[20px] text-[16px]'/>
                         </div>
                         <div onClick={handleNext} className="hover:bg-gray-200/80 rounded-full p-1 transition-all duration-500">
-                            <GrFormNext style={{ fontSize: '20px', color: '#3c4043' }} />
+                            <GrFormNext className='text-[#3c4043] sm:text-[20px] text-[16px]' />
                         </div>
                     </div>
                     <div className='flex flex-col relative'>
                         <div onClick={() => openCalendar()} className="hover:bg-gray-200/80 py-1 px-2 rounded-[4px] cursor-pointer transition-all duration-500 flex whitespace-nowrap w-full open-calendar">
-                            <span className='text-[#3c4043] font-normal text-[22px]'>{moment(currentDate).format('MMMM') + ' ' + moment(currentDate).get('year')}</span>
+                            <span className='text-[#3c4043] font-normal sm:text-[22px] text-[16px]'>{moment(currentDate).format('MMMM') + ' ' + moment(currentDate).get('year')}</span>
                         </div>
                         {viewCalendar && <div className='absolute mt-12 -ml-20 z-50'>
                             <Calendar onChange={(e) => selectDate(e)} value={value} />
@@ -81,7 +81,7 @@ const Header = ({ handlePrevious, handleNext, currentDate, setCurrentWeek }: any
                 </div>
             </div>
 
-            <div className="relative right w-[200px] flex items-center justify-evenly" style={{ fontSize: '22px', color: '#3c4043' }}>
+            <div className="relative right w-[200px] flex items-center justify-evenly sm:text-[22px] sm:text-[#3c4043] text-[16px]">
                 <div className="hover:bg-gray-200/80 rounded-full p-1 transition-all duration-500 cursor-pointer">
                     <AiOutlineSearch />
                 </div>

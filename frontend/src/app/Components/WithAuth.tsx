@@ -1,6 +1,6 @@
 'use client';
 import { useRouter, usePathname } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 const WithAuth = (Component: any) => {
     const AuthCheck = (props: any) => {
