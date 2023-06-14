@@ -6,7 +6,7 @@ const job = cron.schedule('* * * * *', async () => {
     console.log("running");
     // let api = "https://google-calendar-backend.vercel.app/api/event/trigger-mail";
     // await axios.get(api)
-    await sendMail();
+    // await sendMail();
 })
 
 module.exports = {

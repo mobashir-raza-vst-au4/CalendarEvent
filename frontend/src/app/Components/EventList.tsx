@@ -62,12 +62,15 @@ const EventList = ({ date, events, setEvents, fn }: any) => {
   };
 
   const handleClick = (e: any, data: any) => {
-
+    console.log("x--", e.clientX)
+    console.log("y--", e.clientY)
+    console.log("innerWidth--", window.innerWidth)
     let l = e.clientX + 10
     let h = e.clientY
-    if ((window.innerWidth - e.clientX) < 200) {
+    if ((window.innerWidth - e.clientX) < 230) {
       l = l - 200;
     }
+
     if ((window.innerHeight - e.clientY) < 100) {
       h = h - 100;
     }
@@ -88,7 +91,7 @@ const EventList = ({ date, events, setEvents, fn }: any) => {
 
   }
   return (
-    <div className="flex flex-col justify-center items-center absolute mt-2 -ml-[2%] w-[10%]">
+    <div className="flex flex-col justify-center items-center absolute sm:mt-2 mt-3 -ml-[2%] w-[10%]">
       {filteredEvents.map((event: any) => (
         <div
           onClick={(e) => handleClick(e, event)}
@@ -106,13 +109,6 @@ const EventList = ({ date, events, setEvents, fn }: any) => {
               })}
             </div>
           </div>
-          {/* {hoveredEventId === event._id &&
-            (
-              <div className="absolute sm:right-0 -right-[2px] top-1">
-                <BiDotsVerticalRounded className="text-[#4d4d4d] cursor-pointer" onClick={(e) => handleClick(e, event)} />
-              </div>
-            )
-          } */}
 
           {showPopup && clickedEventId === event._id && (
             <Transition appear show={showPopup} as={Fragment}>

@@ -128,12 +128,12 @@ const Page = () => {
 
       <Header handlePrevious={handlePreviousWeek} handleNext={handleNextWeek} currentDate={currentDate} setCurrentWeek={handleSetCurrentWeek} />
 
-      <div className="flex justify-evenly items-center h-20 relative border-b-[1px]">
+      <div className="flex justify-evenly items-center h-20 border-b-[1px]">
         <div
           onClick={() => setShowPopup(true)}
-          className="md:h-14 md:w-14 w-10 h-10 rounded-full bg-white shadow-lg flex items-center justify-center cursor-pointer hover:shadow-lg hover:shadow-gray-400/50 transition-all duration-500"
+          className="sm:relative fixed sm:bottom-0 bottom-3 sm:right-0 right-2 z-50 h-14 w-14 rounded-full bg-white shadow-lg flex items-center justify-center cursor-pointer hover:shadow-lg hover:shadow-gray-400/50 transition-all duration-500"
         >
-          <img src="/plus.png" className="sm:h-8 h-5"/>
+          <img src="/plus.png" />
         </div>
         {dates.map((date) => (
           <div key={date.getTime()} className="mr-4">
