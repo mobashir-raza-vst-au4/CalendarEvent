@@ -14,6 +14,7 @@ const Header = ({ handlePrevious, handleNext, currentDate, setCurrentWeek }: any
     const [name, setName] = useState('Guest');
 
     const openCalendar = () => {
+
         setViewCalendar(!viewCalendar)
     }
 
@@ -64,7 +65,7 @@ const Header = ({ handlePrevious, handleNext, currentDate, setCurrentWeek }: any
                     </div>
                     <div className="flex items-center gap-2 cursor-pointer">
                         <div onClick={handlePrevious} className="hover:bg-gray-200/80 rounded-full p-1 transition-all duration-500">
-                            <GrFormPrevious className='text-[#3c4043] sm:text-[20px] text-[16px]'/>
+                            <GrFormPrevious className='text-[#3c4043] sm:text-[20px] text-[16px]' />
                         </div>
                         <div onClick={handleNext} className="hover:bg-gray-200/80 rounded-full p-1 transition-all duration-500">
                             <GrFormNext className='text-[#3c4043] sm:text-[20px] text-[16px]' />
@@ -74,7 +75,7 @@ const Header = ({ handlePrevious, handleNext, currentDate, setCurrentWeek }: any
                         <div onClick={() => openCalendar()} className="hover:bg-gray-200/80 py-1 px-2 rounded-[4px] cursor-pointer transition-all duration-500 flex whitespace-nowrap w-full open-calendar">
                             <span className='text-[#3c4043] font-normal sm:text-[22px] text-[16px]'>{moment(currentDate).format('MMMM') + ' ' + moment(currentDate).get('year')}</span>
                         </div>
-                        {viewCalendar && <div className='absolute mt-12 -ml-20 z-50'>
+                        {viewCalendar && <div className='absolute z-50 top-10 -left-[168px] sm:left-0'>
                             <Calendar onChange={(e) => selectDate(e)} value={value} />
                         </div>}
                     </div>

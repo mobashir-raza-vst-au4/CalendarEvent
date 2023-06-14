@@ -91,7 +91,7 @@ const EventList = ({ date, events, setEvents, fn }: any) => {
 
   }
   return (
-    <div className="flex flex-col justify-center items-center absolute sm:mt-2 mt-3 -ml-[2%] w-[10%]">
+    <div className="flex flex-col justify-center items-center absolute sm:mt-2 mt-3 sm:-ml-[2%] ml-0 w-[10%]">
       {filteredEvents.map((event: any) => (
         <div
           onClick={(e) => handleClick(e, event)}
